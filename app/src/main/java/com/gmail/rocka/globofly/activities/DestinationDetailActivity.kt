@@ -56,7 +56,6 @@ class DestinationDetailActivity : AppCompatActivity() {
         val destinationService: DestinationService = ServiceBuilder.buildService(DestinationService::class.java)
         val requestCall: retrofit2.Call<Destination> = destinationService.getDestination(id)
 
-
         requestCall.enqueue(object : retrofit2.Callback<Destination> {
 
             override fun onResponse(call: retrofit2.Call<Destination>, response: Response<Destination>) {
@@ -68,59 +67,98 @@ class DestinationDetailActivity : AppCompatActivity() {
                         et_country.setText(destination.country)
                         collapsing_toolbar.title = destination.city
                     }
-                }
-                else{
-                    Toast.makeText(this@DestinationDetailActivity,"Failed to retrive the selected destination",Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        this@DestinationDetailActivity,
+                        "Failed to retrieve the selected destination",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             override fun onFailure(call: retrofit2.Call<Destination>, t: Throwable) {
-                Toast.makeText(this@DestinationDetailActivity,"Failed to retrive the selected destination",Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@DestinationDetailActivity,
+                    "Failed to retrieve the selected destination",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
 
-                private fun initUpdateButton(id: Int) {
+    private fun initUpdateButton(id: Int) {
 
-            btn_update.setOnClickListener {
+        btn_update.setOnClickListener {
 
-                val city = et_city.text.toString()
-                val description = et_description.text.toString()
-                val country = et_country.text.toString()
+            val city = et_city.text.toString()
+            val description = et_description.text.toString()
+            val country = et_country.text.toString()
 
-                // To be replaced by retrofit code
-                val destination = Destination()
-                destination.id = id
-                destination.city = city
-                destination.description = description
-                destination.country = country
+            val destinationService: DestinationService =
+                ServiceBuilder.buildService(DestinationService::class.java)
+            val requestCall: retrofit2.Call<Destination> = destinationService.modifyDestination(id, city, country, description)
 
-                SampleData.updateDestination(destination);
-                finish() // Move back to DestinationListActivity
-            }
-        }
+            requestCall.enqueue(object : retrofit2.Callback<Destination> {
 
-                private fun initDeleteButton(id: Int) {
+                override fun onResponse(
+                    call: retrofit2.Call<Destination>,
+                    response: Response<Destination>
+                ) {
 
-            btn_delete.setOnClickListener {
+                    if (response.isSuccessful) {
+                        finish() // Move back to DestinationListActivity
+                        Toast.makeText(this@DestinationDetailActivity, "Details updated Successfully.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@DestinationDetailActivity, "Failed to update the selected destination", Toast.LENGTH_SHORT).show()
+                    }
+                }
 
-                // To be replaced by retrofit code
-                SampleData.deleteDestination(id)
-                finish() // Move back to DestinationListActivity
-            }
-        }
-
-                override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            val id = item.itemId
-            if (id == android.R.id.home) {
-                navigateUpTo(Intent(this, DestinationListActivity::class.java))
-                return true
-            }
-            return super.onOptionsItemSelected(item)
-        }
-
-                companion object {
-
-            const val ARG_ITEM_ID = "item_id"
+                override fun onFailure(call: retrofit2.Call<Destination>, t: Throwable) {
+                    Toast.makeText(this@DestinationDetailActivity, "Failed to update the selected destination", Toast.LENGTH_SHORT).show() }
+            })
         }
     }
+
+    private fun initDeleteButton(id: Int) {
+
+        btn_delete.setOnClickListener {
+
+            val destinationService: DestinationService =
+                ServiceBuilder.buildService(DestinationService::class.java)
+            val requestCall: retrofit2.Call<UInt> = destinationService.deleteDestination(id)
+
+            requestCall.enqueue(object : retrofit2.Callback<UInt> {
+
+                override fun onResponse(
+                    call: retrofit2.Call<UInt>,
+                    response: Response<UInt>
+                ) {
+
+                    if (response.isSuccessful) {
+                        finish() // Move back to DestinationListActivity
+                        Toast.makeText(this@DestinationDetailActivity, "Successfully Deleted the Destination.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@DestinationDetailActivity, "Failed to delete the selected destination", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: retrofit2.Call<UInt>, t: Throwable) {
+                    Toast.makeText(this@DestinationDetailActivity, "Failed to delete the selected destination", Toast.LENGTH_SHORT).show() }
+            })
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == android.R.id.home) {
+            navigateUpTo(Intent(this, DestinationListActivity::class.java))
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+
+        const val ARG_ITEM_ID = "item_id"
+    }
+}

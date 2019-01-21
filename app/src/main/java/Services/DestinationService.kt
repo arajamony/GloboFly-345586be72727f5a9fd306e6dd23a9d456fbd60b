@@ -2,21 +2,31 @@ package Services
 
 import com.gmail.rocka.globofly.models.Destination
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
-import retrofit2.http.QueryMap
+import retrofit2.http.*
 
 interface DestinationService {
 
     @GET("destination")
-    fun getDestinationList(@QueryMap _filter:HashMap<String,String>?): Call<List<Destination>>
+    fun getDestinationList(@QueryMap _filter: HashMap<String, String>?): Call<List<Destination>>
 
     @GET("destination/{id}")
     fun getDestination(@Path("id") id: Int): Call<Destination>
 
-//    @GET("destination/GetDestinationByCountry")
+    //    @GET("destination/GetDestinationByCountry")
 //    fun getDestinationByCountry(@Query("Country") Country:String): Call<List<Destination>>
+    @POST("destination")
+    fun addDestination(@Body newDestination: Destination): Call<Destination>
 
+    @FormUrlEncoded
+    @PUT("destination/{id}")
+    fun modifyDestination(
+        @Path("id") id: Int,
+        @Field("city") city: String,
+        @Field("country") country: String,
+        @Field("description") description: String
+    ): Call<Destination>
+
+    @DELETE("destination/{id}")
+    fun deleteDestination(@Path("id") id: Int): Call<UInt>
 }
 
