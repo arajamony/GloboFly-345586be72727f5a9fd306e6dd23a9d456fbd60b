@@ -23,7 +23,7 @@ class WelcomeActivity : AppCompatActivity() {
 		//Service Call to retrive the Welcome Message
 		val mseeageService: MessageService = ServiceBuilder.buildService(MessageService::class.java)
 		val requestCall: Call<List<Message>> =
-			mseeageService.getMessage("http://192.168.1.2/WebApp1_Alternate/api/destination/GetMessage")
+			mseeageService.getMessage("http://18.191.209.98/WebApp1_Alternate/api/destination/GetMessage")
 		requestCall.enqueue(object : Callback<List<Message>> {
 			override fun onResponse(call: Call<List<Message>>, response: Response<List<Message>>) {
 				if (response.isSuccessful) {
