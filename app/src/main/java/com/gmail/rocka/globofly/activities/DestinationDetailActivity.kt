@@ -94,9 +94,14 @@ class DestinationDetailActivity : AppCompatActivity() {
             val description = et_description.text.toString()
             val country = et_country.text.toString()
 
+            val newDestination = Destination()
+            newDestination.city=city
+            newDestination.country=country
+            newDestination.description=description
+
             val destinationService: DestinationService =
                 ServiceBuilder.buildService(DestinationService::class.java)
-            val requestCall: retrofit2.Call<Destination> = destinationService.modifyDestination(id, city, country, description)
+            val requestCall: retrofit2.Call<Destination> = destinationService.modifyDestination(id, newDestination)
 
             requestCall.enqueue(object : retrofit2.Callback<Destination> {
 

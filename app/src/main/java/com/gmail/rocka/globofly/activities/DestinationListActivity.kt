@@ -49,6 +49,8 @@ class DestinationListActivity : AppCompatActivity() {
 //        Filter["Country"] = "India"
 //        Filter["Count"] = "1"
         val requestCall: Call<List<Destination>> = destinationService.getDestinationList(Filter)
+        //requestCall.cancel() to cancel the ongoing request
+        //requestCall.isCanceled to check whether request is cqnceled or not
 
         requestCall.enqueue(object : retrofit2.Callback<List<Destination>> {
 

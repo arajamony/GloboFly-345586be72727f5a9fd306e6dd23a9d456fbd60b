@@ -6,6 +6,7 @@ import retrofit2.http.*
 
 interface DestinationService {
 
+    //@Headers("x-device-type:Android") // we can add our own custom Headers(multiple headers can be added)
     @GET("destination")
     fun getDestinationList(@QueryMap _filter: HashMap<String, String>?): Call<List<Destination>>
 
@@ -17,14 +18,17 @@ interface DestinationService {
     @POST("destination")
     fun addDestination(@Body newDestination: Destination): Call<Destination>
 
-    @FormUrlEncoded
+//    @FormUrlEncoded
+//    @PUT("destination/{id}")
+//    fun modifyDestination(
+//        @Path("id") id: Int,
+//        @Field("city") city: String,
+//        @Field("country") country: String,
+//        @Field("description") description: String
+//    ): Call<Destination>
+
     @PUT("destination/{id}")
-    fun modifyDestination(
-        @Path("id") id: Int,
-        @Field("city") city: String,
-        @Field("country") country: String,
-        @Field("description") description: String
-    ): Call<Destination>
+    fun modifyDestination(@Path("id") id: Int, @Body newDestination: Destination): Call<Destination>
 
     @DELETE("destination/{id}")
     fun deleteDestination(@Path("id") id: Int): Call<UInt>
